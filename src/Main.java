@@ -7,23 +7,23 @@ import java.text.DecimalFormat;
 
 public class Main extends JFrame implements ActionListener {
     private int operator = 0;
-    private DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
-    private String[] calculatorSymbols = {
+    private final DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
+    private final String[] calculatorSymbols = {
             "AC", "+/-", "%", "/","7","8","9","*","4","5","6","-","1","2","3","+","0",".","Adv","="
     };
-    private JPanel calculatorPanel = new JPanel(new BorderLayout(5, 5));
-    private JPanel buttonPanel = new JPanel(new GridLayout(5, 3,2,2));
-    private JButton[] buttons = new JButton[calculatorSymbols.length];
-    private JTextArea screen = new JTextArea(5,40);
+    private final JPanel calculatorPanel = new JPanel(new BorderLayout(5, 5));
+    private final JPanel buttonPanel = new JPanel(new GridLayout(5, 3,2,2));
+    private final JButton[] buttons = new JButton[calculatorSymbols.length];
+    private final JTextArea screen = new JTextArea(5,40);
     private double firstNumber = 0;
-    private double secondNumber = 0;
-    private JTextField calculatorTextField = new JTextField(40);
+    private final JTextField calculatorTextField = new JTextField(40);
 
     public Main(){
         init();
     }
     private void init(){
         setTitle("Basic Calculator");
+        screen.setFont(new Font("Arial",Font.BOLD, 20));
         screen.setBackground(Color.darkGray);
         calculatorPanel.setBackground(Color.darkGray);
         buttonPanel.setBackground(Color.darkGray);
@@ -38,6 +38,9 @@ public class Main extends JFrame implements ActionListener {
             buttons[i].addActionListener(this);
             buttonPanel.add(buttons[i]);
         }
+
+        calculatorTextField.setBackground(Color.darkGray);
+        calculatorTextField.setForeground(Color.WHITE);
         calculatorPanel.add(calculatorTextField, BorderLayout.SOUTH);
         calculatorPanel.add(buttonPanel,BorderLayout.CENTER);
         calculatorPanel.add(screen,BorderLayout.NORTH);
@@ -56,7 +59,7 @@ public class Main extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand().toString();
+        String command = e.getActionCommand();
         switch (command) {
             case ".":
                 if(!screen.getText().contains("."))
@@ -94,27 +97,76 @@ public class Main extends JFrame implements ActionListener {
                 break;
             case "+":
                 if (!screen.getText().isEmpty()){
-                    firstNumber = Double.parseDouble(screen.getText().toString());
+                    firstNumber = Double.parseDouble(screen.getText());
+                    operator = 1;
                     screen.setText("");
                 }
+                break;
             case "-":
                 if (!screen.getText().isEmpty()){
-                    firstNumber = Double.parseDouble(screen.getText().toString());
+                    firstNumber = Double.parseDouble(screen.getText());
+                    operator = 2;
                     screen.setText("");
+
                 }
+                break;
             case "*":
                 if (!screen.getText().isEmpty()){
-                    firstNumber = Double.parseDouble(screen.getText().toString());
+                    firstNumber = Double.parseDouble(screen.getText());
+                    operator = 3;
                     screen.setText("");
                 }
+                break;
             case "/":
                 if (!screen.getText().isEmpty()){
-                    firstNumber = Double.parseDouble(screen.getText().toString());
+                    firstNumber = Double.parseDouble(screen.getText());
+                    operator = 4;
                     screen.setText("");
                 }
+                break;
             case "+/-":
+                double negativeNumber = Double.parseDouble(screen.getText());
+                negativeNumber *= -1;
+                screen.setText(String.valueOf(negativeNumber));
+                break;
             case "AC":
+                screen.setText("");
+                break;
+            case "%":
+                double number = Double.parseDouble(screen.getText());
+                screen.setText(String.valueOf(number/100));
+                break;
+            case "Adv":
 
+
+            default:
+
+        }
+        if (command.equalsIgnoreCase("=")){
+            if (!screen.getText().isEmpty()){
+                double secondNumber = Double.parseDouble(screen.getText());
+
+                switch (operator) {
+                    case 1 -> { // +
+                        screen.setText(String.valueOf(firstNumber + secondNumber));
+                        calculatorTextField.setText(firstNumber + " + " + secondNumber + " = " + (decimalFormat.format(firstNumber + secondNumber)));
+                    }
+                    case 2 -> { // -
+                        screen.setText(String.valueOf(firstNumber - secondNumber));
+                        calculatorTextField.setText(firstNumber + " - " + secondNumber + " = " + (decimalFormat.format(firstNumber - secondNumber)));
+                    }
+                    case 3 -> { // *
+                        screen.setText(String.valueOf(firstNumber * secondNumber));
+                        calculatorTextField.setText(firstNumber + " * " + secondNumber + " = " + (decimalFormat.format(firstNumber * secondNumber)));
+                    }
+                    case 4 -> { // division
+                        screen.setText(String.valueOf(firstNumber / secondNumber));
+                        calculatorTextField.setText(firstNumber + " / " + secondNumber + " = " + (decimalFormat.format(firstNumber / secondNumber)));
+                    }
+                    default -> {
+                    }
+                }
+            }
         }
     }
 }
