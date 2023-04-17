@@ -137,7 +137,51 @@ public class Main extends JFrame implements ActionListener {
                 screen.setText(String.valueOf(number/100));
                 break;
             case "Adv":
+                setTitle("Advanced Calculator");
+                JPanel advancedPanel = new JPanel(new GridLayout(4, 1, 5, 5));
+                advancedPanel.setBackground(Color.darkGray);
 
+                // Create buttons for the advanced operations
+                JButton sinButton = new JButton("sin");
+                JButton cosButton = new JButton("cos");
+                JButton tanButton = new JButton("tan");
+                JButton sqrtButton = new JButton("sqrt");
+
+                // Add action listeners for the advanced operation buttons
+                sinButton.addActionListener(e1 -> {
+                    double radians = Math.toRadians(Double.parseDouble(screen.getText()));
+                    double result = Math.sin(radians);
+                    screen.setText(String.valueOf(result));
+                });
+                cosButton.addActionListener(e1 -> {
+                    double radians = Math.toRadians(Double.parseDouble(screen.getText()));
+                    double result = Math.cos(radians);
+                    screen.setText(String.valueOf(result));
+                });
+                tanButton.addActionListener(e1 -> {
+                    double radians = Math.toRadians(Double.parseDouble(screen.getText()));
+                    double result = Math.tan(radians);
+                    screen.setText(String.valueOf(result));
+                });
+                sqrtButton.addActionListener(e1 -> {
+                    double number2 = Double.parseDouble(screen.getText());
+                    double result = Math.sqrt(number2);
+                    screen.setText(String.valueOf(result));
+                });
+
+                // Add buttons to the advanced panel
+                advancedPanel.add(sinButton);
+                advancedPanel.add(cosButton);
+                advancedPanel.add(tanButton);
+                advancedPanel.add(sqrtButton);
+
+                // Set the advanced panel as the center panel of the calculatorPanel
+                calculatorPanel.remove(buttonPanel);
+                calculatorPanel.add(advancedPanel, BorderLayout.CENTER);
+                calculatorPanel.add(buttonPanel, BorderLayout.SOUTH);
+                calculatorPanel.revalidate();
+                calculatorPanel.repaint();
+                break;
 
             default:
 
